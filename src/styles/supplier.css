@@ -1,0 +1,103 @@
+.item-title{
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.supplier-container{
+    margin: 20px;
+}
+
+.title-container{
+    border-radius: 16px;
+    padding: 20px;
+    background-color: #EBEEFD;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px 40px;
+
+}
+.input-label{
+    font-size: 16px;
+    font-weight: 500;
+}
+.input-section{
+    display: flex;
+    flex-direction: column;
+    
+}
+.input-label{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.input-box{
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    outline: none;
+}
+
+.option-header{
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    outline: none;
+}
+.option-list{
+    cursor: pointer;
+}
+
+
+.rule{
+   color: #00000080;
+   font-size: 12px;
+   margin-top: 6px;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.submit-btn{
+    background-color: #007AFF;
+    height: 40px;
+    width: 200px;
+    text-align: center;
+    color:#fff;
+    cursor: pointer;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+}
+
+.phone-input{
+    width: 100%;
+    display: flex;
+}
+.PhoneInputCountrySelect{
+    padding: 8px 12px;
+    width: 100px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    outline: none;
+    border: none;
+}
+
+.PhoneInput{
+    display: flex;
+}
+.PhoneInputCountryIcon{
+    display: none;
+}
+.PhoneInputInput{
+    width: 100%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border: none;
+    padding-left: 10px;
+}
+.PhoneInputInput:focus{
+    outline: none;
+}

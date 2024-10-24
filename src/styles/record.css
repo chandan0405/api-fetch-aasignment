@@ -1,0 +1,52 @@
+.record-container{
+    border: 2px solid #D0D5DD;
+    padding: 20px;
+    margin: 10px;
+    height: 90vh;
+    border-radius: 8px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+
+}
+.header p{
+    font-size: 18px;
+    font-weight: 600;
+}
+.clear-btn{
+    height: 40px;
+    width: 100px;
+    border: 2px solid #D0D5DD;
+    border-radius: 8px;
+    padding: 10px 16px;
+}
+.record{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    /* display: grid;
+    grid-template-columns: 50px repeat(auto); */
+}
+
+.item-checkox{
+    display: flex;
+    flex-direction: column;
+}
+p{
+    font-size: 16px;
+    margin: 10px;
+}
+
+
+.record-table{
+    width: 100%;
+}
+tr th{
+    text-align: left;
+}
+tr td{
+   text-align: left;
+   height: 50px;
+   
+}

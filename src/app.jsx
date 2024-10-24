@@ -1,17 +1,14 @@
-import { useState } from 'preact/hooks'
-import preactLogo from './assets/preact.svg'
-import viteLogo from '/vite.svg'
-import './app.css'
 
-export function App() {
-  const [count, setCount] = useState(0)
+import './app.css'
+import Header from './components/Header'
+import ItemCard from './components/ItemCard'
+import Record from './components/Record'
+import SupplierCard from './components/SupplierCard'
+export function App () {
 
   return (
     <>
-      <div>
-        <h1>Welcome to the reactjs</h1>
-      </div>
-      
+      <Header />
     </>
   )
 }
