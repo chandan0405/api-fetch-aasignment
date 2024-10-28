@@ -1,14 +1,16 @@
 
+import { Route, Routes } from 'react-router-dom'
 import './app.css'
-import Header from './components/Header'
-import ItemCard from './components/ItemCard'
-import Record from './components/Record'
-import SupplierCard from './components/SupplierCard'
+import Header from './components/Header';
+import Record from "../src/components/Record";
 export function App () {
 
   return (
     <>
-      <Header />
+      <Routes>
+        <Route path="/" element={<Header />} />
+        <Route path="/record" element={<Record />} />
+      </Routes>
     </>
   )
 }

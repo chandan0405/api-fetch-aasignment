@@ -1,40 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import "../styles/supplier.css";
 import PhoneInput from 'react-phone-number-input';
-import PhoneInputWithCountrySelect from 'react-phone-number-input';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitSupplierData } from '../reduxToolkit/supplierItemSlice';
 
 const SupplierCard = () => {
+    const dispatch = useDispatch();
     const [countryList, setCountryList] = useState([]);
     const [selectedCountryID, setSelectedCountryID] = useState("");  // Track selected country ID
     const [selectedStateID, setSelectedStateID] = useState("");      // Track selected state ID
+    const [selectedCityID, setSelectedCityID] = useState("")
     const [states, setStates] = useState([]);                        // State list for selected country
     const [cities, setCities] = useState([]);                        // City list for selected state
     const [dataValid, setDataVlid] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState("");
+    const [selectedCity, setselectedCity] = useState("");
 
     const [supplierData, setSupplierData] = useState({
         supplierName: "",
         compnayName: "",
-        email: "",
-        phone: "",
+        supplierEmail: "",
+        supplierPhone: "",
     })
 
 
     useEffect(() => {
-        const { supplierName, compnayName, email, phone } = supplierData;
+        const { supplierName, compnayName, supplierEmail, supplierPhone } = supplierData;
 
         // Regex for basic email validation
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        if (supplierName && compnayName && selectedCountryID && selectedStateID && phone) {
-            if (emailRegex.test(email)) {
+        if (supplierName && compnayName && selectedCity && selectedCountry && supplierPhone) {
+            if (emailRegex.test(supplierEmail)) {
                 setDataVlid(true);
             } else {
+                console.log("Email is invalid", emailRegex.test(supplierEmail));
                 setDataVlid(false);  // Email is invalid
             }
         } else {
             setDataVlid(false);  // Some other field is missing
         }
-    }, [supplierData, selectedCountryID, selectedStateID, cities]);
+    }, [supplierData, selectedCountry, selectedCity, selectedStateID]);
+
 
 
     useEffect(() => {
@@ -44,7 +51,7 @@ const SupplierCard = () => {
                 const countryData = await result.json();
                 setCountryList(countryData?.data);
             } catch (error) {
-                console.log("Error fetching country list", error.message);
+                console.log("Error fetching country list:", error.message);
             }
         };
         fetchCountry();
@@ -74,7 +81,7 @@ const SupplierCard = () => {
                 try {
                     const result = await fetch(`https://apis-technical-test.conqt.com/Api/countrystatecity/Get-All-CityList-By-Country-State?countryId=${selectedCountryID}&stateId=${selectedStateID}`);
                     const resultCity = await result.json();
-                    
+
                     setCities(resultCity?.data);
                 } catch (error) {
                     console.log("Error fetching cities", error.message);
@@ -92,10 +99,36 @@ const SupplierCard = () => {
         }));
     }
 
+    const handleChangeCountry = (e) => {
+        const countryId = e.target.value;
+        setSelectedCountryID(countryId);
+        // Find the selected country's name from countryList
+        const countryName = countryList?.countyList?.find(country => country.countryId === Number(countryId))?.name;
+        setSelectedCountry(countryName);
+    };
 
-
-    const handleSave = () => {
+    const handleChangeCity = (e) => {
+        const cityID = e.target.value;
+        setSelectedCityID(cityID);
+        const cityName = cities.cityList?.find((city) => city.cityId === Number(cityID))?.name;
+        setselectedCity(cityName)
     }
+
+
+    // SupplierCard Component
+    const handleSupplierSave = () => {
+        const data = {
+            supplierName: supplierData.supplierName,
+            companyName: supplierData.compnayName,
+            supplierEmail: supplierData.supplierEmail,
+            supplierPhone: supplierData.supplierPhone,
+            country:selectedCountry,
+            city:selectedCity,
+        };
+        console.log(data)
+        dispatch(submitSupplierData(data)); 
+    };
+
 
     return (
         <div className='supplier-container'>
@@ -103,7 +136,7 @@ const SupplierCard = () => {
             <div className='title-container'>
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Supplier Name
+                        Supplier Name{''}
                         <input type="text"
                             className='input-box'
                             placeholder='Enter supplier Name'
@@ -117,7 +150,7 @@ const SupplierCard = () => {
                 </div>
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Company Name
+                        Company Name{''}
                         <input type="text"
                             className='input-box'
                             placeholder='Enter Company Name'
@@ -133,10 +166,12 @@ const SupplierCard = () => {
                 {/* Country Dropdown */}
                 <div className='input-section'>
                     <label htmlFor="country" className='input-label'>
-                        Country
+                        Country{''}
                         <select
                             value={selectedCountryID}
-                            onChange={(e) => setSelectedCountryID(e.target.value)}  // Capture countryId
+                            onChange={(e) => {
+                                handleChangeCountry(e)
+                            }}  // Capture countryId
                             id="country"
                             className='option-header'
                         >
@@ -156,7 +191,7 @@ const SupplierCard = () => {
                 {/* State Dropdown */}
                 <div className='input-section'>
                     <label htmlFor="state" className='input-label'>
-                        State
+                        State{''}
                         <select
                             value={selectedStateID}
                             onChange={(e) => setSelectedStateID(e.target.value)}  // Capture stateId
@@ -179,10 +214,12 @@ const SupplierCard = () => {
                 {/* City Dropdown */}
                 <div className='input-section'>
                     <label htmlFor="city" className='input-label'>
-                        City
+                        City{''}
                         <select
                             id="city"
                             className='option-header'
+                            value={selectedCityID}
+                            onChange={(e) => handleChangeCity(e)}
                         >
                             <option value="">Select City</option>
                             {
@@ -198,12 +235,12 @@ const SupplierCard = () => {
                 </div>
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Email Address
+                        Email Address{''}
                         <input type="email"
                             className='input-box'
                             placeholder='Enter email address'
-                            name='email'
-                            value={supplierData.email}
+                            name='supplierEmail'
+                            value={supplierData.supplierEmail}
                             onChange={handleInputChange}
                         />
                     </label>
@@ -215,14 +252,14 @@ const SupplierCard = () => {
                         Phone No
                         <PhoneInput
                             className='phone-input'
-                            name='phone'
+                            name='supplierPhone'
                             defaultCountry="IN"
                             placeholder="Enter phone No"
-                            value={supplierData.phone}
+                            value={supplierData.supplierPhone}
                             onChange={(value) =>
                                 setSupplierData((prevData) => ({
                                     ...prevData,
-                                    phone: value
+                                    supplierPhone: value
                                 }))
                             }
                         />
@@ -232,9 +269,9 @@ const SupplierCard = () => {
                 </div>
             </div>
             {
-                dataValid && <div className='btn-container'>
-                    <button className='submit-btn' onClick={handleSave}>Save Changes</button>
-                </div>
+                dataValid && (<div className='btn-container'>
+                    <button className='submit-btn' onClick={handleSupplierSave}>Save Changes</button>
+                </div>)
             }
         </div>
     );

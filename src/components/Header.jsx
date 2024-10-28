@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import "../styles/header.css";
 import ItemCard from './ItemCard';
 import SupplierCard from './SupplierCard';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     const [titleCheckBox, setTitleCheckBox] = useState(false);
@@ -12,7 +13,10 @@ const Header = () => {
                 <p className='logo'></p>
                 <div className='header-container'>
                     <p className='title'>Inventary Management System</p>
-                    <p className='home'>Home</p>
+                    <div style={{ display: 'flex' }}>
+                        <p className='home'>Home</p>
+                        <Link to={"/record"} className='record'>record</Link>
+                    </div>
                 </div>
             </header>
             <div className='checkbox-container'>

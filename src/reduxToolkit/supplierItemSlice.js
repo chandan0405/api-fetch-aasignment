@@ -9,15 +9,27 @@ const supplierItemSlice = createSlice({
     name: 'supplierItem',
     initialState,
     reducers: {
-        submitData: (state, action) => {
-            // Append the new combined data to the submittedData array
-            state.submittedData.push(action.payload);
+        // Action to add item data
+        submitItemData: (state, action) => {
+            state.submittedData.push({ itemData: action.payload, supplierData: null });
         },
-        // Action to add supplier or item data to the array
-        addRecord: (state, action) => {
-            state.submittedData.push(action.payload);
+
+        // Action to add supplier data to the last item in submittedData
+        submitSupplierData: (state, action) => {
+            const lastEntryIndex = state.submittedData.length - 1;
+            if (lastEntryIndex >= 0 && state.submittedData[lastEntryIndex].supplierData === null) {
+                // Update the supplier data for the existing item entry
+                state.submittedData[lastEntryIndex].supplierData = action.payload;
+                // store the all data to the localStorage
+                const existingEntries = JSON.parse(localStorage.getItem('itemSupplierData')) || [];
+                existingEntries.push(state.submittedData[lastEntryIndex]);
+                localStorage.setItem('itemSupplierData', JSON.stringify(existingEntries));
+            } else {
+                console.warn("No item data found to associate with supplier data");
+            }
         },
-        // Action to clear all records (optional, for reset purpose)
+
+        // Clear all records if needed
         clearRecords: (state) => {
             state.submittedData = [];
         },
@@ -25,7 +37,7 @@ const supplierItemSlice = createSlice({
 });
 
 // Export actions to dispatch them
-export const { addRecord, clearRecords,submitData } = supplierItemSlice.actions;
+export const { submitItemData, submitSupplierData, clearRecords } = supplierItemSlice.actions;
 
 // Export the reducer to use in the store
 export default supplierItemSlice.reducer;

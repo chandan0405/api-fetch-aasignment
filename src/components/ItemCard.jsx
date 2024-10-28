@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "../styles/item.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { submitData } from '../reduxToolkit/supplierItemSlice';
+import { submitItemData } from '../reduxToolkit/supplierItemSlice';
 
 const ItemCard = () => {
     const supplierSlice = useSelector((state) => state.supplierItem.submittedData);
@@ -16,18 +16,6 @@ const ItemCard = () => {
 
     const [dateOfSubmission, setDateOfSubmission] = useState("");
     const [isDataValid, setIsDataValid] = useState(false);
-
-    const handleSave = () => {
-        const data = {
-            itemName: inputData.itemName,
-            price: inputData.price,
-            quantity: inputData.quantity,
-            dateOfSubmission: dateOfSubmission
-        };
-        // Dispatch the action with the combined data
-        dispatch(submitData(data));
-        
-    };
 
     const formatUnitPrice = (price) => {
         const formatPrice = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -65,13 +53,25 @@ const ItemCard = () => {
         }
     }, [inputData, dateOfSubmission]); // Added dateOfSubmission to the dependencies
 
+
+    const handleItemSave = () => {
+        const itemData = {
+            itemName: inputData.itemName,
+            price: inputData.price,
+            quantity: inputData.quantity,
+            dateOfSubmission: dateOfSubmission,
+        };
+        dispatch(submitItemData(itemData)); // Dispatch item data first
+    };
+
+
     return (
         <>
             <h1 className='item-title'>Item Detail</h1>
             <div className='title-container'>
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Item Name
+                        Item Name {''}
                         <input
                             type="text"
                             className='input-box'
@@ -88,7 +88,7 @@ const ItemCard = () => {
 
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Quantity
+                        Quantity{''}
                         <input
                             type="number"
                             className='input-box'
@@ -104,7 +104,7 @@ const ItemCard = () => {
 
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Unit Price
+                        Unit Price {''}
                         <input
                             type="number"
                             className='input-box'
@@ -120,7 +120,7 @@ const ItemCard = () => {
 
                 <div className='input-section'>
                     <label htmlFor="" className='input-label'>
-                        Date Of Submission
+                        Date Of Submission{''}
                         <input
                             type="date"
                             className='input-box'
@@ -138,7 +138,7 @@ const ItemCard = () => {
 
             {isDataValid && (
                 <div className='btn-container'>
-                    <button className='submit-btn' onClick={handleSave}>
+                    <button className='submit-btn' onClick={handleItemSave}>
                         Save Changes
                     </button>
                 </div>
